@@ -1,14 +1,12 @@
+require('dotenv').config();
+
 const express = require('express')
 const app = express()
 const http = require('http')
 const mongoose = require('mongoose')
 const cors = require('cors')
-const dotenv = require('dotenv')
 const morgan = require('morgan')
 const multer = require('multer')
-
-// Load environment variables first
-dotenv.config()
 
 const server = http.createServer(app)
 
@@ -17,9 +15,9 @@ app.use(express.json({ limit: '10mb', extended: true }))
 app.use(express.urlencoded({ limit: '10mb', extended: true }))
 app.use(morgan("common"))
 
-// CORS Configuration
 const corsOptions = {
-    origin: ['http://localhost:3000', 'http://localhost:3001'], // Add multiple origins if needed
+    // Adding 8081 for Expo and '*' for testing if needed
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://192.168.1.11:5000'], 
     credentials: true,
     optionSuccessStatus: 200,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -134,7 +132,7 @@ const connectDB = async () => {
         console.log('✅ MongoDB Connected:', conn.connection.host);
 
         // Start server only after successful DB connection
-        server.listen(PORT, () => {
+        server.listen(PORT, '0.0.0.0', () => {
             console.log(`🚀 FoundHere Mobile Application server running on port ${PORT}`);
             console.log(`🌐 API Base URL: http://localhost:${PORT}/api`);
             console.log(`📱 Health Check: http://localhost:${PORT}/`);
